@@ -1,0 +1,44 @@
+---
+title: Snippets Reference
+description: Quick reference cheat sheet for Quarkus Studio's built-in qs- snippets for application.properties and Java files.
+sidebar:
+  order: 1
+---
+
+# Quarkus Studio Snippets Reference
+
+Quarkus Studio bundles an extensive set of productivity snippets for `application.properties`, `application.yaml`, and Java source code. All snippets use the prefix **`qs-`** or **`qs:`**.
+
+Type `qs` in your editor and press <kbd>Tab</kbd> or <kbd>Enter</kbd> to trigger autocompletion.
+
+---
+
+## ⚙️ Configuration Snippets (`application.properties`)
+
+| Prefix | Description | Generated Configuration Sample |
+| :--- | :--- | :--- |
+| `qs-http` | HTTP server port, root path, and CORS | `quarkus.http.port=8080`<br/>`quarkus.http.cors=true` |
+| `qs-datasource-pg` | PostgreSQL JDBC datasource | `quarkus.datasource.db-kind=postgresql`<br/>`quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/db` |
+| `qs-datasource-reactive-pg` | Reactive PostgreSQL datasource (Vert.x) | `quarkus.datasource.db-kind=postgresql`<br/>`quarkus.datasource.reactive.url=postgresql://localhost:5432/db` |
+| `qs-datasource-mysql` | MySQL JDBC datasource | `quarkus.datasource.db-kind=mysql`<br/>`quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/db` |
+| `qs-hibernate` | Hibernate ORM DDL generation and dialect | `quarkus.hibernate-orm.database.generation=drop-and-create`<br/>`quarkus.hibernate-orm.log.sql=true` |
+| `qs-kafka` | Kafka connection and Dev Services | `quarkus.kafka.devservices.enabled=true`<br/>`mp.messaging.incoming.orders.connector=smallrye-kafka` |
+| `qs-redis` | Redis Client hosts & connection pool | `quarkus.redis.hosts=redis://localhost:6379` |
+| `qs-oidc` | OIDC Keycloak authentication setup | `quarkus.oidc.auth-server-url=http://localhost:8080/realms/quarkus`<br/>`quarkus.oidc.client-id=quarkus-app` |
+| `qs-log` | Logging categories and console format | `quarkus.log.console.format=%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n` |
+| `qs-jwt` | SmallRye JWT verification settings | `mp.jwt.verify.publickey.location=/publicKey.pem`<br/>`mp.jwt.verify.issuer=https://auth.example.com` |
+
+---
+
+## ☕ Java Code & Annotation Snippets
+
+| Prefix | Description | Generated Java Construct |
+| :--- | :--- | :--- |
+| `qs-endpoint-get` | JAX-RS GET endpoint method | `@GET`<br/>`@Produces(MediaType.APPLICATION_JSON)`<br/>`public Response getAll() { ... }` |
+| `qs-endpoint-post` | JAX-RS POST endpoint method | `@POST`<br/>`@Consumes(MediaType.APPLICATION_JSON)`<br/>`public Response create(DTO dto) { ... }` |
+| `qs-entity-panache` | Panache Active Record Entity | `@Entity public class Item extends PanacheEntity { ... }` |
+| `qs-repo-panache` | Panache Repository class | `@ApplicationScoped public class ItemRepo implements PanacheRepository<Item> { ... }` |
+| `qs:log-info` | Fast Quarkus static logger | `Log.infof("Processing event: %s", id);` |
+| `qs:log-error` | Error logger with exception | `Log.errorf(e, "Failed processing item %s", id);` |
+| `qs-tx` | Programmatic transaction block | `QuarkusTransaction.requiringNew().run(() -> { ... });` |
+| `qs-test` | Quarkus Test class scaffold | `@QuarkusTest public class ItemTest { ... }` |

@@ -1,0 +1,84 @@
+---
+title: Project Builder
+description: Scaffold enterprise single-module and multi-module Quarkus applications with Maven or Gradle using Quarkus Studio.
+sidebar:
+  order: 2
+---
+
+import { Card, CardGrid, Steps } from '@astrojs/starlight/components';
+
+# Project Builder & Scaffolding
+
+Quarkus Studio includes an intelligent scaffolding engine designed for both single-module microservices and complex enterprise multi-module architectures.
+
+---
+
+## 🏗️ Multi-Module Enterprise Scaffolding
+
+Enterprise Quarkus architectures often require clean separation between shared domain models, deployment configurations, and microservices. Quarkus Studio automates this boilerplate setup in seconds.
+
+### Supported Build Tools
+- **Maven**: Generates a root parent `pom.xml`, dependency management block, plugin configuration, and submodules.
+- **Gradle**: Generates root `settings.gradle` / `settings.gradle.kts` and root `build.gradle` with subproject management.
+
+### Generated Project Structure
+
+```text
+my-quarkus-app/
+├── pom.xml                   # Parent POM with common versions and Quarkus BOM
+├── common/                   # Shared library module (DTOs, utilities, exceptions)
+│   ├── pom.xml
+│   └── src/main/java/...
+├── deployment/               # Packaging / Helm / container manifests
+│   ├── compose.yml
+│   └── init-db.sql
+└── order-service/            # Runnable Quarkus microservice module
+    ├── pom.xml
+    └── src/main/java/...
+```
+
+---
+
+## ⚡ Scaffolding Commands
+
+You can run any of the following commands from the VS Code Command Palette (<kbd>F1</kbd> or <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>):
+
+| Command | Action |
+| :--- | :--- |
+| `Quarkus Studio: Create Single Module Project with Maven` | Creates a standard single-module Quarkus Maven project with interactive extension selection. |
+| `Quarkus Studio: Create Single Module Project with Gradle` | Creates a standard single-module Quarkus Gradle project. |
+| `Quarkus Studio: Create Multi Module Project with Maven` | Scaffolds parent POM, `common` module, runnable microservices, and Docker Compose stack. |
+| `Quarkus Studio: Create Multi Module Project with Gradle` | Scaffolds Gradle root settings, shared library, and subprojects. |
+| `Quarkus Studio: Add New Module` | Adds a new microservice under the project root, automatically assigns an unused dev port, and registers it in the parent build file. |
+| `Quarkus Studio: Add Starters` | Injects curated starter technology bundles into your active project. |
+| `Quarkus Studio: Add Quarkus Extension` | Interactively searches the live `code.quarkus.io` catalog and adds dependencies to `pom.xml` or `build.gradle`. |
+
+---
+
+## 📦 Curated Starter Packs
+
+Instead of searching for individual libraries, use **Add Starters** to inject pre-configured technology stacks:
+
+<CardGrid>
+  <Card title="Web API Starter" icon="rocket">
+    Includes RESTEasy Reactive (Jackson), OpenAPI / Swagger UI, Bean Validation, and SmallRye Health.
+  </Card>
+  <Card title="PostgreSQL Panache Starter" icon="laptop">
+    Configures Quarkus Hibernate ORM with Panache, JDBC Driver for PostgreSQL, Agroal pool, and Flyway database migrations.
+  </Card>
+  <Card title="Event-Driven Kafka Starter" icon="puzzle">
+    Adds SmallRye Reactive Messaging for Apache Kafka with schema registry and serialization helpers.
+  </Card>
+  <Card title="Security & OIDC Starter" icon="seti:lock">
+    Configures OpenID Connect (OIDC) client and resource server with Keycloak Dev Services integration.
+  </Card>
+</CardGrid>
+
+---
+
+## ➕ Adding Quarkus Extensions
+
+1. Open your project in VS Code.
+2. In the Apps View sidebar header, click the **Add Extension** icon (or use the Command Palette).
+3. Type keywords (e.g. `redis`, `grpc`, `scheduler`, `amazon-s3`).
+4. Select the desired extensions; Quarkus Studio updates your `pom.xml` or `build.gradle` immediately without corrupting formatting.

@@ -1,0 +1,214 @@
+---
+title: Initial Setup
+description: Step-by-step installation and initial setup guide for Quarkus Studio in VS Code and Open VSX-compatible editors using SDKMAN.
+sidebar:
+  order: 1
+---
+
+import { Steps, Tabs, TabItem, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+# Getting Started with Quarkus Studio
+
+**Quarkus Studio** is an advanced developer productivity suite for [Quarkus](https://quarkus.io), available on the [Open VSX Registry](https://open-vsx.org/extension/maratib/quarkus-studio) and compatible with VS Code, VSCodium, Eclipse Theia, and Gitpod.
+
+This guide will walk you through installing the required developer toolchain (**Java**, **Maven or Gradle**, and **Quarkus CLI**) using **[SDKMAN!](https://sdkman.io)**, configuring container runtimes, and launching Quarkus Studio.
+
+---
+
+## 🛠️ Step 1: Install Required Software with SDKMAN!
+
+[SDKMAN!](https://sdkman.io) is the easiest and most reliable tool to manage parallel versions of multiple Software Development Kits (Java, Maven, Gradle, Quarkus CLI) on macOS, Linux, and Windows (via WSL or MSYS2).
+
+<Steps>
+
+1. ### Install SDKMAN!
+
+   Open a terminal and run the official installation script:
+
+   ```bash
+   curl -s "https://get.sdkman.io" | bash
+   ```
+
+   Open a new terminal or initialize SDKMAN in your current session:
+
+   ```bash
+   source "$HOME/.sdkman/bin/sdkman-init.sh"
+   ```
+
+   Verify the installation:
+
+   ```bash
+   sdk version
+   ```
+
+2. ### Install Java (JDK 21 LTS Recommended)
+
+   Quarkus works best with modern LTS versions of Java (Java 17 or Java 21). Install Eclipse Temurin (or GraalVM / Mandrel for ahead-of-time native image compilation):
+
+   <Tabs>
+     <TabItem label="Eclipse Temurin (Standard)">
+       ```bash
+       sdk install java 21-tem
+       ```
+     </TabItem>
+     <TabItem label="GraalVM CE (Native Image Ready)">
+       ```bash
+       sdk install java 21.0.2-graalce
+       ```
+     </TabItem>
+   </Tabs>
+
+   Verify your Java version:
+
+   ```bash
+   java -version
+   ```
+
+3. ### Install Build Tool (Maven or Gradle)
+
+   Install either **Apache Maven** or **Gradle** (or both):
+
+   <Tabs>
+     <TabItem label="Apache Maven">
+       ```bash
+       sdk install maven
+       ```
+       Verify:
+       ```bash
+       mvn -version
+       ```
+     </TabItem>
+     <TabItem label="Gradle">
+       ```bash
+       sdk install gradle
+       ```
+       Verify:
+       ```bash
+       gradle -version
+       ```
+     </TabItem>
+   </Tabs>
+
+4. ### Install Quarkus CLI
+
+   The official Quarkus command-line interface makes it easy to create projects, execute commands, and run Dev Mode from the shell:
+
+   ```bash
+   sdk install quarkus
+   ```
+
+   Verify the Quarkus CLI installation:
+
+   ```bash
+   quarkus --version
+   ```
+
+</Steps>
+
+---
+
+## 🐳 Step 2: Container Engine (For Dev Services)
+
+Quarkus Dev Services starts zero-config background containers (PostgreSQL, Kafka, Redis, Keycloak, etc.) automatically during dev mode and testing.
+
+Ensure you have one of the following container runtimes running:
+- **Docker Desktop** or Docker Engine: `docker ps`
+- **Podman**: `podman ps`
+
+---
+
+## 💻 Step 3: Install Quarkus Studio Extension
+
+<Tabs>
+  <TabItem label="VS Code / VSCodium GUI">
+    1. Open your editor and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> (or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> on macOS) to open the Extensions view.
+    2. Search for `Quarkus Studio` or `maratib.quarkus-studio`.
+    3. Click **Install**.
+  </TabItem>
+  <TabItem label="Terminal CLI">
+    Install directly via command line:
+
+    ```bash
+    # For VS Code
+    code --install-extension maratib.quarkus-studio
+
+    # For VSCodium
+    codium --install-extension maratib.quarkus-studio
+    ```
+  </TabItem>
+  <TabItem label="Manual VSIX Download">
+    1. Download the latest `.vsix` package from the [Open VSX Registry](https://open-vsx.org/extension/maratib/quarkus-studio).
+    2. In VS Code, open the Command Palette (<kbd>F1</kbd> or <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>).
+    3. Run **Extensions: Install from VSIX...** and select the downloaded file.
+  </TabItem>
+</Tabs>
+
+---
+
+## ⚙️ Step 4: Configure Settings (Optional)
+
+Quarkus Studio works out of the box with zero configuration. You can adjust your container runtime or auto-refresh settings in `settings.json`:
+
+```json title=".vscode/settings.json"
+{
+  "quarkusStudio.containerRuntime": "auto",
+  "quarkusStudio.devServices.autoRefresh": true,
+  "quarkusStudio.continuousTesting.rerunOnSave": true
+}
+```
+
+---
+
+## 🚀 Step 5: Launch Your First Project
+
+<Steps>
+
+1. ### Create or Open a Quarkus Project
+
+   - **From Command Palette**: Press <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and run `Quarkus Studio: Create Single Module Project with Maven` (or Gradle).
+   - **From Terminal with Quarkus CLI**:
+     ```bash
+     quarkus create app com.example:my-quarkus-app --extension=resteasy-reactive-jackson
+     code my-quarkus-app
+     ```
+
+2. ### Open the Apps View Sidebar
+
+   Click the **Quarkus Studio** icon in the Activity Bar on the left. You will see your service listed under the **Apps** tree.
+
+3. ### Start Dev Mode and Launch Dev UI
+
+   - Click the green **Play** button next to your app (or run `quarkus dev`).
+   - Quarkus Studio launches Dev Mode in a dedicated integrated terminal.
+   - Click **Open Dev UI** in the sidebar to open `http://localhost:8080/q/dev-ui` directly in your browser.
+
+</Steps>
+
+---
+
+## 🎯 Next Steps
+
+Explore the capabilities of Quarkus Studio:
+
+<CardGrid>
+  <LinkCard
+    title="Project Builder"
+    description="Scaffold single & multi-module enterprise architectures with Maven or Gradle."
+    href="/guides/project-builder/"
+  />
+  <LinkCard
+    title="Apps View & Dev Mode"
+    description="Manage application lifecycles and browse REST endpoints with one-click navigation."
+    href="/guides/apps-view/"
+  />
+  <LinkCard
+    title="Dev Services Manager"
+    description="Inspect background test containers, grab JDBC connection strings, and stream logs."
+    href="/guides/dev-services/"
+  />
+  <LinkCard
+    title="Panache Entity Generator"
+    description="Generate Active Record or Repository entities, DTOs, and REST CRUD APIs from JSON or SQL."
+    href="/guides/panache-generator/"
+  />
+</CardGrid>

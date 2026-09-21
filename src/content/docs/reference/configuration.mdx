@@ -1,0 +1,45 @@
+---
+title: Settings Reference
+description: Complete reference of all Quarkus Studio configuration settings and options.
+sidebar:
+  order: 2
+---
+
+# Quarkus Studio Settings Reference
+
+Quarkus Studio offers customizable settings accessible via the VS Code Settings editor (<kbd>Ctrl/Cmd</kbd> + <kbd>,</kbd>) under the `quarkusStudio` section, or in your workspace `settings.json`.
+
+---
+
+## ⚙️ Configuration Properties
+
+| Setting | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `quarkusStudio.containerRuntime` | `string` | `"auto"` | Preferred container runtime. Choices: `"auto"`, `"docker"`, or `"podman"`. |
+| `quarkusStudio.devServices.autoRefresh` | `boolean` | `true` | Automatically refresh Dev Services containers periodically in the sidebar. |
+| `quarkusStudio.devServices.refreshInterval` | `number` | `5` | Polling interval (in seconds) for Dev Services container refreshes. |
+| `quarkusStudio.devServices.quarkusDevUrl` | `string` | `"http://localhost:8080"` | Fallback base URL for the running Quarkus Dev instance. |
+| `quarkusStudio.configAssistant.enableInlayHints` | `boolean` | `true` | Show inline cloud deployment resource and cost estimates in `application.properties`. |
+| `quarkusStudio.configAssistant.enableDiagnostics` | `boolean` | `true` | Warn when build-time fixed properties are marked for runtime override in `application.properties`. |
+| `quarkusStudio.configAssistant.codeQuarkusUrl` | `string` | `"https://code.quarkus.io/api/extensions"` | Metadata API endpoint URL for the `code.quarkus.io` extension catalog. |
+| `quarkusStudio.panache.defaultBackend` | `string` | `"hibernate-orm"` | Default persistence provider for Panache generation (`"hibernate-orm"` or `"mongodb"`). |
+| `quarkusStudio.panache.defaultPattern` | `string` | `"active-record"` | Default architectural pattern for Panache generation (`"active-record"` or `"repository"`). |
+| `quarkusStudio.continuousTesting.enabled` | `boolean` | `true` | Enable live continuous testing integration and status HUD. |
+| `quarkusStudio.continuousTesting.rerunOnSave` | `boolean` | `true` | Automatically rerun failed tests upon saving any Java source or configuration file. |
+| `quarkusStudio.continuousTesting.showGutterIndicators` | `boolean` | `true` | Render pass/fail indicators directly in the code editor gutter next to test methods. |
+| `quarkusStudio.continuousTesting.showCodeLens` | `boolean` | `true` | Show interactive Run / Rerun CodeLens buttons above test methods. |
+| `quarkusStudio.continuousTesting.devUiUrl` | `string` | `"http://localhost:8080"` | Base URL for Quarkus Dev UI continuous testing REST API polling. |
+
+---
+
+## 📄 Example `settings.json`
+
+```json title=".vscode/settings.json"
+{
+  "quarkusStudio.containerRuntime": "auto",
+  "quarkusStudio.devServices.autoRefresh": true,
+  "quarkusStudio.configAssistant.enableInlayHints": true,
+  "quarkusStudio.continuousTesting.rerunOnSave": true,
+  "quarkusStudio.panache.defaultPattern": "active-record"
+}
+```

@@ -1,0 +1,118 @@
+---
+title: Panache Entity & REST Generator
+description: Generate production-grade Hibernate with Panache and MongoDB entities, Record DTOs, and full CRUD REST resources.
+sidebar:
+  order: 5
+---
+
+import { Tabs, TabItem, Card, CardGrid } from '@astrojs/starlight/components';
+
+# Panache Entity & REST Generator
+
+Writing repetitive boilerplate for entities, DTOs, repositories, and JAX-RS CRUD endpoints is tedious. Quarkus Studio provides an end-to-end generator to scaffold production-ready code with best practices.
+
+---
+
+## 🚀 Generation Input Modes
+
+You can invoke the generator from the Command Palette or by right-clicking in the Explorer:
+
+1. **Interactive Wizard**: Prompts you for entity name, field definitions (e.g. `name:String, price:BigDecimal, inStock:Boolean`), and pattern preferences.
+2. **JSON Sample Payload**: Right-click any `.json` sample payload to infer Java field names and types (including nested objects, UUIDs, dates, and numbers).
+3. **SQL / DDL Schema Parser**: Right-click any `.sql` schema script containing `CREATE TABLE` statements. Quarkus Studio maps SQL types (`BIGSERIAL`, `VARCHAR`, `TIMESTAMP`, `DECIMAL`) to Java types and converts `snake_case` column names to `camelCase` properties with `@Column(name = "...")`.
+
+---
+
+## 🏛️ Architectural Patterns
+
+Quarkus Studio lets you choose your preferred architecture:
+
+<Tabs>
+  <TabItem label="Active Record Pattern (Recommended)">
+    Idiomatic Quarkus style extending `PanacheEntity`:
+
+    ```java title="Product.java"
+    package com.example.domain;
+
+    import io.quarkus.hibernate.orm.panache.PanacheEntity;
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.Table;
+    import java.math.BigDecimal;
+
+    @Entity
+    @Table(name = "products")
+    public class Product extends PanacheEntity {
+        public String name;
+        public BigDecimal price;
+        public Boolean inStock;
+
+        public static Product findByName(String name) {
+            return find("name", name).firstResult();
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="Repository Pattern">
+    Traditional Domain-Driven Design (DDD) with an `@Entity` and companion `@ApplicationScoped` repository:
+
+    ```java title="ProductRepository.java"
+    package com.example.repository;
+
+    import com.example.domain.Product;
+    import io.quarkus.hibernate.orm.panache.PanacheRepository;
+    import jakarta.enterprise.context.ApplicationScoped;
+
+    @ApplicationScoped
+    public class ProductRepository implements PanacheRepository<Product> {
+        public Product findByName(String name) {
+            return find("name", name).firstResult();
+        }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## 📦 Modern Java 17+ Record DTOs
+
+Quarkus Studio generates immutable Java `record` classes with bidirectional mapping helpers:
+
+```java title="ProductDTO.java"
+package com.example.dto;
+
+import com.example.domain.Product;
+import java.math.BigDecimal;
+
+public record ProductDTO(Long id, String name, BigDecimal price, Boolean inStock) {
+    public static ProductDTO fromEntity(Product entity) {
+        return new ProductDTO(entity.id, entity.name, entity.price, entity.inStock);
+    }
+
+    public Product toEntity() {
+        Product entity = new Product();
+        entity.name = this.name();
+        entity.price = this.price();
+        entity.inStock = this.inStock();
+        return entity;
+    }
+
+    public void updateEntity(Product entity) {
+        entity.name = this.name();
+        entity.price = this.price();
+        entity.inStock = this.inStock();
+    }
+}
+```
+
+---
+
+## ⚡ Complete REST CRUD Endpoints
+
+Along with models and DTOs, Quarkus Studio creates full JAX-RS / Quarkus REST endpoints under `@Path("/api/<entities>")`:
+
+- `GET /api/products` - Returns list of all products mapped to DTOs.
+- `GET /api/products/{id}` - Returns single item or `404 Not Found`.
+- `POST /api/products` - `@Transactional` creation endpoint returning `201 Created` with `Location` header.
+- `PUT /api/products/{id}` - Updates entity fields.
+- `DELETE /api/products/{id}` - Removes entity and returns `204 No Content`.

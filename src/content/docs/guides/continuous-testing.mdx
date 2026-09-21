@@ -1,0 +1,69 @@
+---
+title: Continuous Testing
+description: Live in-editor test HUD, gutter indicators, test profile switching, and instant feedback as you code in Quarkus.
+sidebar:
+  order: 6
+---
+
+import { Steps, Badge } from '@astrojs/starlight/components';
+
+# Continuous Testing & In-Editor HUD
+
+Quarkus revolutionized Java testing with **Continuous Testing**, running tests that cover the code you touched in the background. **Quarkus Studio** brings this directly into the VS Code interface.
+
+---
+
+## 🚦 In-Editor Gutter Indicators
+
+When editing a test class (`*Test.java`), Quarkus Studio renders real-time pass/fail icons directly in the editor gutter:
+
+- 🟢 **Passed**: Indicates the test method passed in the latest continuous testing run.
+- 🔴 **Failed**: Indicates the test method failed. Hovering over the icon displays the assertion error and stack trace tooltip.
+- 🟡 **Skipped / Paused**: Indicates paused or excluded tests.
+
+---
+
+## 📊 Status Bar Testing HUD
+
+Quarkus Studio injects a continuous testing status indicator in the VS Code Status Bar:
+
+```text
+Quarkus Tests: 42 Passed | 1 Failed | 0 Skipped
+```
+
+Clicking the HUD allows you to quickly toggle test execution, pause testing, or rerun the test suite.
+
+---
+
+## ⚡ Key Continuous Testing Capabilities
+
+### 1. Auto-Rerun on Save
+When `quarkusStudio.continuousTesting.rerunOnSave` is enabled (default `true`), modifying and saving any Java or configuration file automatically triggers re-execution of previously failed tests.
+
+### 2. Interactive CodeLens
+Interactive CodeLens buttons appear above each test class and test method:
+- **Run Test**: Executes only this specific test method.
+- **Rerun Failed**: Instantly triggers re-testing for failing tests without executing the entire suite.
+
+### 3. Quick `@TestProfile` Switching
+Quarkus allows swapping runtime configuration and mocking services via `@TestProfile`. 
+
+Use the command **Quarkus Studio: Switch Test Profile** (`quarkus-studio.continuousTesting.switchProfile`) to:
+- Pick from available `@TestProfile` implementations in the workspace.
+- Scaffold a new `@TestProfile` class.
+- Temporarily disable profile overrides.
+
+---
+
+## ⌨️ Test Runner Keyboard Shortcuts
+
+While the Quarkus dev mode terminal is active, you can also use native Quarkus hotkeys:
+
+| Key | Action |
+| :--- | :--- |
+| <kbd>r</kbd> | Rerun all tests |
+| <kbd>f</kbd> | Rerun only failed tests |
+| <kbd>t</kbd> | Toggle continuous testing on/off |
+| <kbd>p</kbd> | Pause continuous testing |
+| <kbd>b</kbd> | Toggle broken-only mode |
+| <kbd>h</kbd> | View terminal help menu |

@@ -1,0 +1,70 @@
+---
+title: Apps View & Dev Mode
+description: Complete visibility and lifecycle management for Quarkus microservices, dynamic port resolution, and REST endpoints explorer.
+sidebar:
+  order: 3
+---
+
+import { Card, CardGrid, Badge } from '@astrojs/starlight/components';
+
+# Apps View & Dev Mode Orchestration
+
+The **Apps View** is the central control room for your Quarkus applications inside Visual Studio Code. It automatically discovers all modules across single-repo and multi-module workspaces.
+
+---
+
+## 🧭 Workspace Hierarchy & Service Status
+
+Quarkus Studio inspects your Maven root POMs or Gradle `settings.gradle` files to build a structured representation of every service.
+
+### Live Status Indicators
+- ⚪ **Stopped**: Outline play icon. Click the icon to boot Dev Mode for this specific service.
+- 🟢 **Running**: Solid green play indicator. Shows inline actions for **Stop**, **Restart**, **View Logs**, and **Open Dev UI**.
+
+### Dev Mode Terminal Integration
+When you start dev mode, Quarkus Studio launches a dedicated integrated terminal running:
+```bash
+./mvnw compile quarkus:dev
+# or for Gradle
+./gradlew quarkusDev
+```
+All hot reloading, compilation outputs, and standard Quarkus keyboard shortcuts (<kbd>s</kbd> to force reload, <kbd>r</kbd> to run tests, <kbd>h</kbd> for help) remain fully active in the terminal.
+
+---
+
+## 🌐 Dynamic Dev UI Launcher
+
+Quarkus provides a rich in-browser developer console at `/q/dev-ui`. 
+
+In multi-service setups, services often run on custom ports (e.g. `8081`, `8082`) configured in `application.properties` via `quarkus.http.port`:
+
+```properties title="application.properties"
+quarkus.http.port=8082
+```
+
+Quarkus Studio automatically parses the assigned port and routes the **Open Dev UI** action directly to `http://localhost:8082/q/dev-ui` (falling back to `8080`), saving you from typing URLs manually.
+
+---
+
+## 🔍 REST Endpoints Explorer
+
+Under each application in the tree, expand the **Endpoints** node to inspect all HTTP endpoints discovered across your Java and Kotlin source files.
+
+### Key Capabilities
+- **Color-Coded HTTP Badges**: Visual badges for <Badge text="GET" variant="tip" />, <Badge text="POST" variant="success" />, <Badge text="PUT" variant="note" />, <Badge text="DELETE" variant="danger" />, and <Badge text="PATCH" variant="caution" />.
+- **Jump to Source**: Click any endpoint node in the tree to instantly open the corresponding Java/Kotlin file with the cursor on the handler method.
+- **Inline Actions**:
+  - 🌐 **Open in Browser**: Opens the route in your default web browser.
+  - 📋 **Copy Endpoint URL**: Copies full address (`http://localhost:8080/api/users`) to clipboard.
+  - 📋 **Copy Relative Path**: Copies route path (`/api/users`) to clipboard.
+- **Live Sync**: Watches `**/*.{java,kt}` in the background; endpoints update automatically as you add `@Path` or JAX-RS annotations.
+
+---
+
+## 🗂️ Quick Configuration & Build File Access
+
+Every service in the Apps View exposes instant click-to-open links for:
+- `application.properties` / `application.yaml`
+- `pom.xml` / `build.gradle`
+
+No need to search through deeply nested project folder trees.

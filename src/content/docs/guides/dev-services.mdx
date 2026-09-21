@@ -1,0 +1,62 @@
+---
+title: Dev Services Manager
+description: Effortlessly monitor, manage, and connect to background Quarkus Dev Services and active Docker or Podman containers.
+sidebar:
+  order: 4
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Dev Services Visualizer & Manager
+
+Quarkus Dev Services automatically starts zero-config background containers (such as PostgreSQL, Kafka, Redis, and Keycloak) whenever you run Dev Mode. **Quarkus Studio** provides a dedicated sidebar visualizer to manage and interact with these containers.
+
+---
+
+## 🐳 Container Runtime Compatibility
+
+Quarkus Studio seamlessly works with both:
+- **Docker Desktop / Docker Engine**
+- **Podman (rootless & rootful)**
+
+You can control runtime behavior using the `quarkusStudio.containerRuntime` setting (`auto`, `docker`, or `podman`).
+
+---
+
+## 🔎 Recognized Services & Databases
+
+Quarkus Studio automatically filters out maintenance sidecars (like `testcontainers/ryuk`) and categorizes active service containers:
+
+| Category | Supported Technologies |
+| :--- | :--- |
+| **Databases** | PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, MongoDB |
+| **Messaging & Streaming** | Apache Kafka, RabbitMQ |
+| **Caches & Search** | Redis, OpenSearch, Elasticsearch |
+| **Identity & Security** | Keycloak, HashiCorp Vault |
+| **Testing & Mocking** | WireMock, LocalStack (AWS Emulation), Mailpit (SMTP Mock) |
+
+---
+
+## 🛠️ Management Features
+
+### 1. One-Click Connection Strings
+Need to test your database or cache in a standalone GUI tool (e.g., DBeaver, TablePlus, Redis Insight)?
+
+Right-click any container in the Dev Services view and select **Copy Connection String**:
+- PostgreSQL: `jdbc:postgresql://localhost:<port>/quarkus`
+- MySQL: `jdbc:mysql://localhost:<port>/quarkus`
+- Redis: `redis://localhost:<port>`
+- Kafka: `localhost:<port>` (Bootstrap Servers)
+- RabbitMQ: `amqp://guest:guest@localhost:<port>`
+
+### 2. Live Container Logs
+Click the **View Logs** button on any container to stream live `docker logs -f` into a dedicated VS Code output channel with auto-scrolling.
+
+### 3. Web Console Launcher
+Quickly launch web consoles in your browser with pre-resolved ports:
+- **Keycloak Admin Console**
+- **Mailpit Web UI**
+- **RabbitMQ Management Dashboard**
+
+### 4. Container Controls
+Stop or restart individual Dev Services containers with a single click, or restart Quarkus dev mode directly from the view header.

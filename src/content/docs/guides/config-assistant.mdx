@@ -1,0 +1,66 @@
+---
+title: Config Assistant & Cloud Costs
+description: Profile-aware autocompletion, build-time fixed diagnostics, and real-time cloud cost & footprint estimates in application.properties.
+sidebar:
+  order: 7
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Smart Configuration Assistant
+
+Quarkus configuration relies heavily on `application.properties` and `application.yaml`. Quarkus Studio supercharges these files with live extension catalog sync, profile intelligence, diagnostic safety checks, and real-time cloud cost estimations.
+
+---
+
+## ☁️ Live `code.quarkus.io` Catalog Sync
+
+Quarkus Studio connects directly with the `code.quarkus.io` metadata API to keep configuration schemas completely up to date.
+
+- **Offline Cache**: Pre-bundled with rich property documentation for core extensions (RESTEasy Reactive, Hibernate ORM, Agroal, Kafka, Redis, Security, OpenID Connect).
+- **Dependency Awareness**: Inspects your active `pom.xml` or `build.gradle` to prioritize autocompletion keys for installed libraries.
+- **Command**: Run `Quarkus Studio: Reload Config Metadata` to refresh metadata anytime.
+
+---
+
+## 🎯 Profile-Aware Completion & Value Suggestions
+
+Seamless autocompletion for Quarkus environment profile prefixes:
+- `%dev.` (Development mode)
+- `%test.` (Continuous and unit testing)
+- `%prod.` (Production deployment)
+- Custom profile prefixes (e.g. `%staging.`)
+
+After entering `=`, intelligent enum suggestions pop up (e.g., `fast-jar`, `native`, `postgresql`, `mysql`, `true`, `false`).
+
+---
+
+## ⚠️ Build-Time Fixed Property Diagnostics
+
+In Quarkus, certain configuration properties are **fixed at build-time** (for example: `quarkus.package.type`, `quarkus.datasource.db-kind`, `quarkus.hibernate-orm.database.generation`). Attempting to override them with a runtime environment profile like `%prod.` will produce runtime errors or be silently ignored.
+
+Quarkus Studio identifies these invalid overrides directly in the editor:
+1. Surfaces clear **Diagnostic Warnings** on misconfigured keys.
+2. Provides a one-click **Quick Fix** action: `Remove '%prod.' prefix` to safely set the property globally at build time.
+
+---
+
+## 💡 Inline Cloud Cost & Resource Estimates
+
+Quarkus Studio calculates estimated memory consumption, cold start times, and serverless compute costs directly in your editor via **Inlay Hints**:
+
+```properties title="application.properties"
+quarkus.package.type=native       # 💡 [Cloud Est: ~32MB RSS | Cold start <25ms | Lambda: ~$0.25/1M]
+quarkus.package.type=fast-jar     # 💡 [Cloud Est: ~192MB RSS | Cold start ~1.5s | Lambda: ~$0.83/1M]
+quarkus.virtual-threads.enabled=true  # 💡 [Loom: ~90% lower thread memory per req]
+quarkus.datasource.jdbc.max-size=25   # 💡 [Pool Buffer: ~50MB RAM | 25 conns]
+```
+
+### Rich Hover Tooltips
+Hover over any property to open a detailed breakdown comparing:
+- GraalVM Native Image vs OpenJDK JVM footprints
+- AWS Lambda / Google Cloud Run invocation pricing estimates
+- Kubernetes Pod density calculations
+
+### Comprehensive Sizing Report
+Run the command `Quarkus Studio: Show Cloud Cost & Resource Estimates` to generate a complete Markdown/HTML sizing report for your microservice.

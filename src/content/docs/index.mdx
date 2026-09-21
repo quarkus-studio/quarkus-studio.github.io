@@ -1,40 +1,103 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Quarkus Studio
+description: Advanced Developer Productivity Suite for Quarkus in Visual Studio Code and Open VSX-compatible editors.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Supercharge your Quarkus workflow with real-time Dev Mode orchestration, containerized Dev Services visualizer, Panache code generation, and live continuous testing.
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/quarkus-studio.jpg
+    alt: Quarkus Studio Logo
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Initial Setup
+      link: /guides/initial-setup/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+      variant: primary
+    - text: Open VSX Registry
+      link: https://open-vsx.org/extension/maratib/quarkus-studio
       icon: external
+      variant: secondary
+    - text: Explore User Guides
+      link: /guides/apps-view/
+      icon: open-book
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
-## Next steps
+
+
+## Quick Installation
+
+Get Quarkus Studio up and running in your favorite IDE in seconds:
+
+<Tabs>
+  <TabItem label="VS Code CLI">
+```bash
+code --install-extension maratib.quarkus-studio
+```
+  </TabItem>
+  <TabItem label="VSCodium CLI">
+```bash
+codium --install-extension maratib.quarkus-studio
+```
+  </TabItem>
+  <TabItem label="Open VSX Registry">
+Visit the official [Open VSX Extension Page](https://open-vsx.org/extension/maratib/quarkus-studio) to download the `.vsix` package or install it in Gitpod, Eclipse Theia, and Eclipse Che.
+  </TabItem>
+</Tabs>
+
+---
+
+## 🚀 Key Highlights & User Guides
+
+Explore our detailed sample guides to master the Quarkus Studio developer workflow:
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <Card title="⚡ Initial Setup & First Launch" icon="rocket">
+    Set up Java 17/21+, Maven or Gradle, and Quarkus CLI via SDKMAN!, install the extension, and boot your first app in dev mode.
+    
+    <LinkCard title="Read Initial Setup Guide" href="/guides/initial-setup/" />
+  </Card>
+
+  <Card title="🏗️ Project Builder & Scaffolding" icon="laptop">
+    Scaffold enterprise multi-module or single-module projects with Maven or Gradle, add technology starters, and inject extensions.
+    
+    <LinkCard title="Read Project Builder Guide" href="/guides/project-builder/" />
+  </Card>
+
+  <Card title="📂 Apps View & Dev Mode" icon="setting">
+    Complete visibility over microservice hierarchies, one-click dev mode lifecycle, dynamic Dev UI port routing, and live REST endpoints explorer.
+    
+    <LinkCard title="Read Apps View Guide" href="/guides/apps-view/" />
+  </Card>
+
+  <Card title="🐳 Dev Services Visualizer" icon="puzzle">
+    Inspect and manage background Docker & Podman containers (Postgres, Kafka, Redis, Keycloak), stream logs, and copy ready-to-use JDBC connection strings.
+    
+    <LinkCard title="Read Dev Services Guide" href="/guides/dev-services/" />
+  </Card>
+
+  <Card title="✨ Panache Entity & REST Generator" icon="pencil">
+    Generate Active Record or Repository Panache entities, Java 17+ Record DTOs, and full JAX-RS CRUD resources from wizards, JSON payloads, or SQL DDL.
+    
+    <LinkCard title="Read Panache Generator Guide" href="/guides/panache-generator/" />
+  </Card>
+
+  <Card title="🚦 Continuous Testing & HUD" icon="approve-check">
+    Real-time gutter pass/fail icons next to test methods, status bar testing HUD, auto-rerun on save, and quick `@TestProfile` switching.
+    
+    <LinkCard title="Read Continuous Testing Guide" href="/guides/continuous-testing/" />
+  </Card>
+
+  <Card title="💡 Smart application.properties Assistant" icon="information">
+    Direct `code.quarkus.io` catalog sync, profile completion (`%dev.`, `%prod.`), build-time fixed warnings, and live cloud deployment cost estimates.
+    
+    <LinkCard title="Read Config Assistant Guide" href="/guides/config-assistant/" />
+  </Card>
+
+  <Card title="📖 Snippets & Configuration Reference" icon="open-book">
+    Speed up development with pre-built `qs-` snippets for datasources, Kafka, OIDC, and explore all extension settings.
+    
+    <LinkCard title="Browse Snippets Reference" href="/reference/snippets/" />
+  </Card>
 </CardGrid>
