@@ -2,6 +2,7 @@
   "name": "quarkus-studio-github-io",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@12.5.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -12,9 +13,19 @@
   "dependencies": {
     "@astrojs/starlight": "^0.42.2",
     "astro": "^7.2.10",
-    "sharp": "^0.35.3"
+    "astro-mermaid": "^2.1.0",
+    "mermaid": "^12.0.0",
+    "sharp": "^0.35.4",
+    "starlight-blog": "^0.29.0",
+    "starlight-image-zoom": "^0.16.0",
+    "starlight-theme-galaxy": "^1.0.0"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "sass": "^1.104.1",
+    "starlight-links-validator": "^0.26.0"
   }
 }
