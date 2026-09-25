@@ -1,0 +1,218 @@
+---
+title: Known Issues & Troubleshooting
+description: Solutions for common Quarkus Studio challenges, Dev Mode and container runtime troubleshooting, diagnostic logs, and GitHub issue reporting.
+sidebar:
+  order: 3
+---
+
+import { Card, CardGrid, LinkCard, Tabs, TabItem, Badge, Steps } from '@astrojs/starlight/components';
+
+# Known Issues & Troubleshooting
+
+Encountering an unexpected error or behavior while developing with Quarkus Studio? This guide outlines proven workarounds for common scenarios, tips for capturing diagnostic logs, and instructions for reporting issues.
+
+---
+
+## 🚀 Quick Issue Triage
+
+<CardGrid>
+  <Card title="GitHub Issue Tracker" icon="github">
+    Search existing bug reports, follow ongoing discussions, or report an unlisted issue.
+    
+    <LinkCard title="Search & Open Issues" href="https://github.com/maratib/quarkus-studio/issues" />
+  </Card>
+
+  <Card title="Submit a Bug Report" icon="warning">
+    Include your OS, Java version, container runtime, and extension logs for rapid resolution.
+    
+    <LinkCard title="Create New Bug Report" href="https://github.com/maratib/quarkus-studio/issues/new" />
+  </Card>
+</CardGrid>
+
+---
+
+## 🛠️ Common Scenarios & Solutions
+
+### 1. Dev Mode Fails to Start or Port Conflict
+
+<Badge text="Dev Mode" variant="note" /> <Badge text="Network" variant="caution" />
+
+**Symptom:** Starting dev mode from the Apps View immediately exits or displays:
+```text
+java.net.BindException: Address already in use: 8080
+```
+
+**Causes & Solutions:**
+- **Port already in use:** Another application or an orphaned Quarkus process is occupying port `8080`.
+  - Check listening processes:
+    <Tabs>
+      <TabItem label="macOS / Linux">
+      ```bash
+      lsof -i :8080
+      # Terminate the blocking PID:
+      kill -9 <PID>
+      ```
+      </TabItem>
+      <TabItem label="Windows (PowerShell)">
+      ```powershell
+      Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess | Stop-Process
+      ```
+      </TabItem>
+    </Tabs>
+  - Or reassign your HTTP port in `src/main/resources/application.properties`:
+    ```properties
+    quarkus.http.port=8085
+    ```
+    Quarkus Studio will automatically detect the new port and adjust Dev UI routing.
+- **Missing Wrapper Permissions:** If `./mvnw` or `./gradlew` fails with `Permission denied`:
+  ```bash
+  chmod +x mvnw gradlew
+  ```
+
+---
+
+### 2. Dev Services Containers Not Detected (Docker / Podman)
+
+<Badge text="Dev Services" variant="tip" /> <Badge text="Containers" variant="note" />
+
+**Symptom:** The **Dev Services Manager** tree view is empty, displays container runtime errors, or Quarkus Dev Services fail to spin up databases (PostgreSQL, Kafka, Keycloak).
+
+**Causes & Solutions:**
+- **Daemon Not Running:**
+  - If using Docker Desktop, ensure the Docker engine is running (`docker info`).
+  - If using Podman, ensure your virtual machine is active:
+    ```bash
+    podman machine start
+    ```
+- **Runtime Preference Mismatch:**
+  - By default, Quarkus Studio uses `auto` detection. You can explicitly enforce your engine in `.vscode/settings.json`:
+    ```json
+    {
+      "quarkusStudio.containerRuntime": "docker" // or "podman"
+    }
+    ```
+- **Podman Socket Configuration on macOS/Linux:**
+  - If using Podman rootless, point `DOCKER_HOST` to your Podman socket:
+    ```bash
+    export DOCKER_HOST="unix://$HOME/.local/share/containers/podman/machine/qemu/podman.sock"
+    ```
+
+---
+
+### 3. Java / JDK Version Compatibility
+
+<Badge text="Java Runtime" variant="danger" /> <Badge text="SDKMAN" variant="note" />
+
+**Symptom:** Extension commands fail with `UnsupportedClassVersionError` or Quarkus warnings regarding Java 17+.
+
+**Causes & Solutions:**
+- Quarkus 3.x requires **Java 17** or **Java 21+**.
+- If you use SDKMAN, ensure your active shell or IDE terminal is using the expected JDK:
+  ```bash
+  sdk default java 21.0.2-tem
+  java -version
+  ```
+- Configure VS Code's Java runtime in `settings.json`:
+  ```json
+  {
+    "java.jdt.ls.java.home": "/Users/<your-user>/.sdkman/candidates/java/current"
+  }
+  ```
+
+---
+
+### 4. Continuous Testing Indicators Not Updating
+
+<Badge text="Continuous Testing" variant="success" /> <Badge text="Test Runner" variant="note" />
+
+**Symptom:** Gutter test status icons (green/red) do not update, or the Status Bar indicator remains stuck on `paused`.
+
+**Causes & Solutions:**
+- **Testing is Paused:** Quarkus dev mode defaults continuous testing to paused mode in some configurations.
+  - Press <kbd>r</kbd> in the dev mode terminal to resume test execution.
+  - Or use Command Palette (<kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>): `Quarkus Studio: Start / Resume Continuous Testing`.
+- **Test File Naming Conventions:**
+  - Quarkus testing recognizes standard naming patterns: `*Test.java`, `*TestCase.java`, and `*IT.java`. Verify your test classes adhere to these naming conventions.
+- **Port Offset:** If your Quarkus instance uses a non-standard Dev UI port, update:
+  ```json
+  {
+    "quarkusStudio.continuousTesting.devUiUrl": "http://localhost:<port>"
+  }
+  ```
+
+---
+
+### 5. `application.properties` Autocomplete Missing or Stale
+
+<Badge text="Config Assistant" variant="tip" />
+
+**Symptom:** Extension property autocompletion (`quarkus.*`) or cloud cost estimations do not display in `application.properties`.
+
+**Causes & Solutions:**
+- **Cache Refresh:** Quarkus Studio caches extension metadata from `code.quarkus.io`. Trigger a manual refresh:
+  1. Open Command Palette (<kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>).
+  2. Run `Quarkus Studio: Reload Config Metadata`.
+- **Corporate Proxy or Offline Environment:**
+  - If you are behind a corporate firewall, verify access to `https://code.quarkus.io/api/extensions`.
+  - Alternatively, customize the catalog endpoint:
+    ```json
+    {
+      "quarkusStudio.configAssistant.codeQuarkusUrl": "https://your-internal-registry/api/extensions"
+    }
+    ```
+
+---
+
+### 6. Submodules Missing in Multi-Module Projects
+
+<Badge text="Apps View" variant="note" /> <Badge text="Project Builder" variant="tip" />
+
+**Symptom:** The Apps View only displays the root folder and does not discover nested microservice modules.
+
+**Causes & Solutions:**
+- **Maven:** Verify that root `pom.xml` declares child modules inside `<modules>`:
+  ```xml
+  <modules>
+    <module>common</module>
+    <module>order-service</module>
+  </modules>
+  ```
+- **Gradle:** Ensure `settings.gradle` or `settings.gradle.kts` explicitly includes all subprojects:
+  ```groovy
+  include 'common', 'order-service'
+  ```
+- Click the **Refresh** button in the top-right corner of the **Apps View** title bar.
+
+---
+
+## 📋 Gathering Diagnostic Logs
+
+When reporting an issue, providing log output significantly accelerates investigation:
+
+<Steps>
+1. **Open the Quarkus Studio Output Channel:**
+   - In VS Code, navigate to **View** > **Output** (or <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>U</kbd>).
+   - In the dropdown in the top-right of the Output panel, select **Quarkus Studio**.
+   - Copy any relevant error messages and stack traces.
+
+2. **Check Developer Tools Console:**
+   - Go to **Help** > **Toggle Developer Tools**.
+   - Select the **Console** tab to check for uncaught extension errors.
+
+3. **Verify Environment Details:**
+   - Note your OS version, VS Code / VSCodium version, and Quarkus Studio version.
+   - Run in your terminal:
+     ```bash
+     java -version
+     mvn -version # or gradle -version
+     docker version # or podman version
+     ```
+</Steps>
+
+---
+
+## 💬 Community & Help
+
+- **GitHub Discussions & Issues:** [github.com/maratib/quarkus-studio/issues](https://github.com/maratib/quarkus-studio/issues)
+- **LinkedIn Connect:** [linkedin.com/in/maratibali](https://www.linkedin.com/in/maratibali/)
+- **Open VSX Marketplace:** [open-vsx.org/extension/maratib/quarkus-studio](https://open-vsx.org/extension/maratib/quarkus-studio)

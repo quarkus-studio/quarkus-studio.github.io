@@ -5,6 +5,9 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://quarkus-studio.github.io',
+	redirects: {
+		'/issues': '/reference/issues',
+	},
 	integrations: [
 		starlight({
 			title: 'Quarkus Studio',
@@ -79,6 +82,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Snippets Reference', slug: 'reference/snippets' },
 						{ label: 'Settings Reference', slug: 'reference/configuration' },
+						{ label: 'Known Issues', slug: 'reference/issues' },
 					],
 				},
 			],

@@ -20,9 +20,14 @@ hero:
       link: /guides/apps-view/
       icon: open-book
       variant: minimal
+    - text: Hire Quarkus Developer
+      link: https://www.linkedin.com/in/maratibali/
+      icon: external
+      variant: minimal
 ---
 
 import { Card, CardGrid, LinkCard, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
+import HireBanner from '../../components/HireBanner.astro';
 
 
 
@@ -45,6 +50,8 @@ codium --install-extension maratib.quarkus-studio
 Visit the official [Open VSX Extension Page](https://open-vsx.org/extension/maratib/quarkus-studio) to download the `.vsix` package or install it in Gitpod, Eclipse Theia, and Eclipse Che.
   </TabItem>
 </Tabs>
+
+<HireBanner />
 
 ---
 
@@ -99,5 +106,11 @@ Explore our detailed sample guides to master the Quarkus Studio developer workfl
     Speed up development with pre-built `qs-` snippets for datasources, Kafka, OIDC, and explore all extension settings.
     
     <LinkCard title="Browse Snippets Reference" href="/reference/snippets/" />
+  </Card>
+
+  <Card title="🛠️ Known Issues & Troubleshooting" icon="warning">
+    Encountering hiccups? Find solutions for Dev Mode, container detection, continuous testing, and how to report bugs.
+    
+    <LinkCard title="View Known Issues & Solutions" href="/reference/issues/" />
   </Card>
 </CardGrid>
